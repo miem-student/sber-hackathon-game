@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#133c35">
+<meta name="description" content="Освободи Киберград от уловок Фуфелкренделя! Пять мини-игр о файлах, паролях, сообщениях и цифровой гигиене для детей.">
+<title>Киберград — операция «Анти-Фуфель»</title>
+<link rel="stylesheet" href="campaign.css">
+<link rel="stylesheet" href="maze.css">
+<script src="viewport.js" defer></script>
+<script src="expedition-engine.js" defer></script>
+<script src="mail-engine.js" defer></script>
+<script src="flappy-engine.js" defer></script>
+<script src="maze-game.js" defer></script>
+  <script src="campaign-engine.js" defer></script>
+<script src="artwork.js" defer></script>
+<script src="scene-assets.js" defer></script>
+<script src="native-bridge.js" defer></script>
+<script src="campaign.js" defer></script>
+</head>
+<body>
+
+<div class="progress-header"><div class="progress-copy"><span>Освобождено территорий <strong id="progress-value">0%</strong></span><small id="territory-count">0 из 5 районов</small></div><div id="liberation" role="progressbar" aria-label="Освобождено территорий" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div><button class="round hud-menu" data-do="menu" aria-label="Меню">⋯</button></div>
+<main id="app" tabindex="-1"></main>
+<dialog id="mission-dialog"></dialog>
+</body>
+</html>
