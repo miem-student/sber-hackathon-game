@@ -192,16 +192,13 @@
   function startFlight(){if(route!=='password'||!F.flap(session.password))return;cancelAnimationFrame(raf);updateFlight();lastFrame=performance.now();raf=requestAnimationFrame(flightFrame);root.querySelector('#flight-board').focus({preventScroll:true});}
   function flap(){if(route==='password'&&session.password.status==='running'){F.flap(session.password);updateFlight();}}
   function flightFrame(now){raf=null;if(route!=='password'||session.password.status!=='running')return;if(document.hidden||modal.open){pause();return;}F.step(session.password,Math.min((now-lastFrame)/1000,.05));lastFrame=now;updateFlight();if(session.password.status==='running')raf=requestAnimationFrame(flightFrame);}
-  function councilArt(index,branch){
-    const art=C.council[index].art,[kind,num]=art.split('-');
-    if(kind==='council')return SceneAssets.council[Number(num)];
-    if(kind==='mail')return Number(num)===0&&branch?SceneAssets.mailWarning:SceneAssets.mail[Number(num)];
-    if(kind==='password')return SceneAssets.passwordQuestions[Number(num)];
-    return SceneAssets.turret;
+  function councilArt(index){
+    const number=Number(C.council[index].art.split('-')[1]);
+    return SceneAssets.council[number-1];
   }
   function renderCouncil(){
     route='council';const s=session.council,q=C.activeQuestion(C.council[s.index],s);
-    screen(`<section class="mini council-game" data-branch="${!!s.branch}">${top(missions[2].name)}<div class="mini-heading"><h1>${s.branch?'Что было дальше?':'Совет города'}</h1><p class="decision-count">${s.index+1} / ${C.council.length}</p></div><article class="decision-card" tabindex="0" aria-label="Карточка решения. Свайп влево или вправо выбирает вариант."><div class="decision-illustration">${lessonArt(councilArt(s.index,s.branch),q.title)}</div><div class="decision-story"><p>${q.text}</p></div><span class="swipe-preview" aria-hidden="true"></span></article><div class="decision-options">${q.options.map((t,i)=>button('council-answer',`${i===0?'← ':''}${t}${i===1?' →':''}`,'answer',`data-choice="${i}" ${s.feedback?'disabled':''}`)).join('')}</div>${s.feedback?`<div class="feedback ${s.choice===q.answer?'good':'retry'}" role="status"><b>${s.choice===q.answer?'Верно!':'Попробуй ещё'}</b><p>${s.branch&&q.outcomes?escape(q.outcomes[s.choice])+' ':''}${q.why}</p>${button(s.choice===q.answer?'council-next':'try-answer',s.choice===q.answer?'Дальше →':'Ещё раз')}</div>`:''}</section>`);
+    screen(`<section class="mini council-game" data-branch="${!!s.branch}">${top(missions[2].name)}<div class="mini-heading"><h1>${s.branch?'Что было дальше?':'Совет города'}</h1><p class="decision-count">${s.index+1} / ${C.council.length}</p></div><article class="decision-card" tabindex="0" aria-label="Карточка решения. Свайп влево или вправо выбирает вариант."><div class="decision-illustration">${lessonArt(councilArt(s.index),q.title)}</div><div class="decision-story"><p>${q.text}</p></div><span class="swipe-preview" aria-hidden="true"></span></article><div class="decision-options">${q.options.map((t,i)=>button('council-answer',`${i===0?'← ':''}${t}${i===1?' →':''}`,'answer',`data-choice="${i}" ${s.feedback?'disabled':''}`)).join('')}</div>${s.feedback?`<div class="feedback ${s.choice===q.answer?'good':'retry'}" role="status"><b>${s.choice===q.answer?'Верно!':'Попробуй ещё'}</b><p>${s.branch&&q.outcomes?escape(q.outcomes[s.choice])+' ':''}${q.why}</p>${button(s.choice===q.answer?'council-next':'try-answer',s.choice===q.answer?'Дальше →':'Ещё раз')}</div>`:''}</section>`);
     const card=root.querySelector('.decision-card');let drag=null;
     card.addEventListener('pointerdown',e=>{if(s.feedback||!e.isPrimary||(e.pointerType==='mouse'&&e.button!==0))return;drag={x:e.clientX,y:e.clientY,id:e.pointerId};card.setPointerCapture(e.pointerId);});
     card.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x;card.style.transform=`translateX(${Math.max(-65,Math.min(65,dx))}px) rotate(${dx/30}deg)`;card.querySelector('.swipe-preview').textContent=Math.abs(dx)>30?q.options[dx<0?0:1]:'';});
